@@ -1,0 +1,876 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Site.master.cs" Inherits="AAG.Site" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>AAG</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport" />
+    <link rel="stylesheet" href="assets/css/Main.css" />
+    <link href="assets/images/Temple-T.png" rel="shortcut icon" type="image/x-icon" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+     <script src='//ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment-with-locales.js"></script>
+    <script src="assets/plugins/datetimepicker/transition.js"></script>
+    <script src="assets/plugins/datetimepicker/collapse.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="assets/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <script src="http://cdn.rawgit.com/Eonasdan/bootstrap-datetimepicker/a549aa8780dbda16f6cff545aeabc3d71073911e/src/js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript">
+        function openAdvisorNoticeModal() {
+            $('#advisorLoginNotice').modal('toggle');
+        }
+        
+        function openContactModal() {
+            $('#contactModal').removeClass("fade");
+            $('#contactModal').modal('toggle');
+        }
+
+        function openEventModal() {
+            $('#eventModal').removeClass("fade");
+            $('#eventModal').modal('toggle');
+        }
+    </script>
+</head>
+<body class="html">
+    <form id="form1" runat="server">
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#primary-nav" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="http://www.temple.edu/">
+                        <img alt="Temple University" height="50" src="assets/images/temple-logo.png" /></a>
+                </div>
+                <div class="collapse navbar-collapse" id="primary-nav">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li id="newRequest" runat="server"><a href="#" data-toggle="modal" data-target="#loginModal"><i class="fa fa-plus cherry" aria-hidden="true"></i>NEW REQUEST</a></li>
+                        <li id="requestList" class="dropdown" visible="false" runat="server">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-plus cherry" aria-hidden="true"></i>NEW REQUEST LIST<span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#" data-toggle="modal" data-target="#eventModal"><i class="fa fa-calendar" aria-hidden="true"></i>Event</a></li>
+                                <li><a href="#" data-toggle="modal" data-target="#policyModal"><i class="fa fa-gavel" aria-hidden="true"></i>Policy</a></li>
+                                <li><a href="#" data-toggle="modal" data-target="#resourceModal"><i class="fa fa-files-o" aria-hidden="true"></i>Resource</a></li>
+                                <li><a href="#" data-toggle="modal" data-target="#achievementModal"><i class="fa fa-star" aria-hidden="true"></i>Achievement</a></li>
+                                <li><a href="#" data-toggle="modal" data-target="#announcementModal"><i class="fa fa-bullhorn" aria-hidden="true"></i>Announcement</a></li>
+                                <li><a href="#" data-toggle="modal" data-target="#contactModal"><i class="fa fa-address-card-o" aria-hidden="true"></i>Contact Information</a></li>
+                                <li><a href="#" data-toggle="modal" data-target="#profdevModal"><i class="fa fa-briefcase" aria-hidden="true"></i>Professional Development</a></li>
+                            </ul>
+                        </li>
+                        <li id="logout" visible="false" runat="server">
+                            <asp:LinkButton ID="logoutLinkButton" runat="server" OnClick="logoutLinkButton_Click"><i class="fa fa-sign-out cherry" aria-hidden="true"></i> LOGOUT</asp:LinkButton></li>
+                        <li id="adminLogin" runat="server"><a href="#" data-toggle="modal" data-target="#adminLoginModal"><i class="fa fa-sign-in cherry" aria-hidden="true"></i>ADMIN LOGIN</a></li>
+                    </ul>
+                </div>
+                <!-- /.navbar-collapse -->
+            </div>
+            <!-- /.container-fluid -->
+            <div id="title-header">
+                <div>
+                    <h1>Academic Advising Group</h1>
+                </div>
+            </div>
+            <nav class="navbar navbar-inverse">
+                <div class="container-fluid">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#secondary-nav" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div class="collapse navbar-collapse navbar-center" id="secondary-nav">
+                        <ul class="nav navbar-nav child">
+                            <li><a href="Home.aspx"><i class="fa fa-home" aria-hidden="true"></i>HOME</a></li>
+                            <li><a href="Achievements.aspx"><i class="fa fa-star" aria-hidden="true"></i>ACHIEVEMENTS</a></li>
+                            <li><a href="Resources.aspx"><i class="fa fa-files-o" aria-hidden="true"></i>RESOURCES</a></li>
+                            <li><a href="ProfessionalDevelopment.aspx"><i class="fa fa-briefcase" aria-hidden="true"></i>PROFESSIONAL DEVELOPMENT</a></li>
+                            <li><a href="Policies.aspx"><i class="fa fa-gavel" aria-hidden="true"></i>POLICIES</a></li>
+                            <li><a href="ContactInformation.aspx"><i class="fa fa-address-card-o" aria-hidden="true"></i>CONTACT INFORMATION</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </nav>
+        <div class="aag-bg">
+            <div class="container">
+                <div class="content-bg">
+                    <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                    </asp:ContentPlaceHolder>
+                </div>
+            </div>
+        </div>
+
+
+        <%--EVENT MODAL--%>
+        <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center bgpink">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="eventModalLabel">Create New Event Request</h4>
+                        <small>Please fill out the form below to add an event.</small>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form">
+                            <div id="eventError" class="alert alert-danger text-center" runat="server" visible="false">
+                                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                <asp:Label ID="lblEventError" runat="server" Text=" ERROR: Something went wrong. Please try again."></asp:Label>
+                            </div>
+                            <div id="eventSuccess" class="alert alert-success text-center" runat="server" visible="false">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                <asp:Label ID="lblEventSuccess" runat="server" Text=" SUCCESS: The event request has been submitted."></asp:Label>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-7">
+                                        <label for="txtEventTitle">Title: <span style="color: red;">*</span></label>
+                                        <asp:TextBox ID="txtEventTitle" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <label for="ddlEventType">Type: <span style="color: red;">*</span></label>
+                                        <asp:DropDownList ID="ddlEventType" CssClass="form-control dropdown" runat="server">
+                                        </asp:DropDownList>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="txtEventStart">Start Date: <span style="color: red;">*</span></label>
+                                            <div class="datetimepickerStart input-group date">
+                                                <asp:TextBox ID="txtEventStart" runat="server" CssClass="form-control"></asp:TextBox>
+                                                <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="txtEventEnd">End Date: <span style="color: red;">*</span></label>
+                                            <div class="datetimepickerEnd input-group date">
+                                                <asp:TextBox ID="txtEventEnd" runat="server" CssClass="form-control"></asp:TextBox>
+                                                <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label for="eventDescription">Description: <span style="color: red;">*</span></label>
+                                        <textarea runat="server" class="form-control" id="eventDescription" rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:Button ID="btnEventCancel" runat="server" Text="CANCEL" CssClass="btn btn-default" OnClick="btnEventCancel_Click" />
+                        <asp:Button ID="btnEventSubmit" runat="server" Text="SUBMIT" CssClass="btn btn-pink" OnClick="btnEventSubmit_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <%--DISPLAY EVENT MODAL--%>
+        <div class="modal fade" id="calendarEventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center bgpink">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="calendarEventLabel"> </h4>  
+                        <div id="lblEventTitle"></div>                     
+                    </div>
+                    <div class="modal-body">
+                        <div class="form">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="txtEventStart">Start: </label>
+                                             <asp:Label ID="lblEventStartDate" runat="server" Text=""></asp:Label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="txtEventEnd">End: </label>
+                                            <asp:Label ID="lblEventEndDate" runat="server" Text=""></asp:Label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label for="eventDescription">Description: </label>
+                                         <asp:Label ID="lblEventDescription" runat="server" Text=""></asp:Label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:Button ID="Button1" runat="server" Text="CLOSE" CssClass="btn btn-default" data-dismiss="modal" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%--POLICY MODAL--%>
+        <div class="modal fade" id="policyModal" tabindex="-1" role="dialog" aria-labelledby="policyModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center bgyellow">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title text-center" id="policyModalLabel">Create New Policy Request</h4>
+                        <small>Please fill out the form below to add a policy.</small>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form">
+                            <div id="policyError" class="alert alert-danger text-center" runat="server">
+                                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                <asp:Label ID="lblPolicyError" runat="server" Text=" ERROR: Something went wrong. Please try again."></asp:Label>
+
+                                <%--<asp:Label ID="Label11" runat="server" Text=" ERROR: Something went wrong. Please try again."></asp:Label>--%>
+
+                            </div>
+                            <div id="policySuccess" class="alert alert-success text-center" runat="server">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                <asp:Label ID="Label2" runat="server" Text=" SUCCESS: The policy request has been submitted."></asp:Label>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-7">
+                                        <label for="policyTitle">Title: <span style="color: red;">*</span></label>
+                                        <asp:TextBox ID="policyTitle" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <label for="ddlPolicyType">Type: <span style="color: red;">*</span></label>
+                                        <asp:DropDownList ID="ddlPolicyType" CssClass="form-control dropdown" runat="server">
+                                        </asp:DropDownList>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label for="txtPolicyLink">Link Attachment:</label>
+                                        <asp:TextBox ID="txtPolicyLink" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="txtPolicyFileName">File Name:</label>
+                                        <asp:TextBox ID="txtPolicyFileName" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="policyFileAttachment">File Attachment:</label>
+                                        <div class="input-group">
+                                            <asp:TextBox ID="txtPolicyFile" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
+                                            <label class="input-group-btn">
+                                                <span class="btn btn-yellow"><i class="fa fa-upload" aria-hidden="true"></i>
+                                                    <input type="file" style="display: none;" /></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label for="policyDescription">Description: <span style="color: red;">*</span></label>
+                                        <textarea runat="server" class="form-control" id="policyDescription" rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:Button ID="btnPolicyCancel" CssClass="btn btn-default" data-dismiss="modal" runat="server" Text="CANCEL" />
+                        <asp:Button ID="btnPolicySubmit" CssClass="btn btn-yellow" data-dismiss="modal" runat="server" Text="SUBMIT" OnClick="btnPolicySubmit_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%--RESOURCE MODAL--%>
+        <div class="modal fade" id="resourceModal" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="resourceModalLabel" runat="server">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center bgteal">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="resourceModalLabel">Create New Resource Request</h4>
+                        <small>Please fill out the form below to add a resource.</small>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form">
+                            <%--<div id="resourceError" class="alert alert-danger text-center" runat="server">
+                                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                <asp:Label ID="Label3" runat="server" Text=" ERROR: Something went wrong. Please try again."></asp:Label>
+                            </div>
+                            <div id="resourceSuccess" class="alert alert-success text-center" runat="server">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                <asp:Label ID="Label4" runat="server" Text=" SUCCESS: The resource request has been submitted."></asp:Label>
+                            </div>--%>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-7">
+                                        <label for="resourceTitle">Title: <span style="color: red;">*</span></label>
+                                        <asp:TextBox ID="resourceTitle" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <label for="ddlResourceType">Type: <span style="color: red;">*</span></label>
+                                        <asp:DropDownList ID="ddlResourceType" CssClass="form-control dropdown" runat="server">
+                                        </asp:DropDownList>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label for="txtResourceLink">Link Attachment:</label>
+                                        <asp:TextBox ID="txtResourceLink" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="txtResourceFileName">File Name:</label>
+                                        <asp:TextBox ID="txtResourceFileName" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="resourceFileAttachment">File Attachment:</label>
+                                        <div class="input-group">
+                                            <asp:TextBox ID="txtResourceFile" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
+                                            <label class="input-group-btn">
+                                                <span class="btn btn-teal"><i class="fa fa-upload" aria-hidden="true"></i>
+                                                    <input type="file" style="display: none;" /></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label for="resourceDescription">Description: <span style="color: red;">*</span></label>
+                                        <textarea runat="server" class="form-control" id="resourceDescription" rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:Button ID="btnResourceCancel" CssClass="btn btn-default" data-dismiss="modal" runat="server" Text="CANCEL" />
+                        <asp:Button ID="btnResourceSubmit" CssClass="btn btn-teal" data-backdrop="static" runat="server" Text="SUBMIT" OnClick="btnResourceSubmit_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%--ACHIEVEMENT MODAL--%>
+        <div class="modal fade" id="achievementModal" tabindex="-1" role="dialog" aria-labelledby="achievementModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center bglight-blue">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="achievementModalLabel">Create New Achievement Request</h4>
+                        <small>Please fill out the form below to add an achievement item.</small>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form">
+                            <div id="achievementError" class="alert alert-danger text-center" runat="server">
+                                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                <asp:Label ID="Label9" runat="server" Text=" ERROR: Something went wrong. Please try again."></asp:Label>
+                            </div>
+                            <div id="achievementSuccess" class="alert alert-success text-center" runat="server">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                <asp:Label ID="Label10" runat="server" Text=" SUCCESS: The achievement item request has been submitted."></asp:Label>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="txtFirstName">First Name: <span style="color: red;">*</span></label>
+                                        <asp:TextBox ID="txtFirstName" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="txtLastName">Last Name: <span style="color: red;">*</span></label>
+                                        <asp:TextBox ID="txtLastName" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label for="txtAchievementTitle">Title: <span style="color: red;">*</span></label>
+                                        <asp:TextBox ID="txtAchievementTitle" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6 time-padding">
+                                        <label for="ddlAchievementType">Type: <span style="color: red;">*</span></label>
+                                        <asp:DropDownList ID="ddlAchievementType" CssClass="form-control dropdown" runat="server">
+                                        </asp:DropDownList>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="tbxAchievementDate">Achievement Date: <span style="color: red;">*</span></label>
+                                        <span style="cursor: pointer;" data-container="body" data-toggle="popover" data-placement="top" data-content="The date the achievement was received.">
+                                            <i class="fa fa-question-circle" aria-hidden="true"></i>
+                                        </span>
+                                        <div class="datepicker input-group date">
+                                            <asp:TextBox ID="tbxAchievementDate" runat="server" CssClass="form-control"></asp:TextBox>
+                                            <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label for="txtAchievementLink">Link Attachment:</label>
+                                        <asp:TextBox ID="txtAchievementLink" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="txtAchievementFileName">File Name:</label>
+                                        <asp:TextBox ID="txtAchievementFileName" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="txtAchievementFile">File Attachment:</label>
+                                        <div class="input-group">
+                                            <asp:TextBox ID="txtAchievementFile" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
+                                            <label class="input-group-btn">
+                                                <span class="btn btn-lblue"><i class="fa fa-upload" aria-hidden="true"></i>
+                                                    <input type="file" style="display: none;" /></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label for="achievementDescription">Description: <span style="color: red;">*</span></label>
+                                        <textarea runat="server" class="form-control" id="achievementDescription" rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:Button ID="btnAchievementCancel" CssClass="btn btn-default" data-dismiss="modal" runat="server" Text="CANCEL" />
+                        <asp:Button ID="btnAchievementSubmit" CssClass="btn btn-lblue" data-dismiss="modal" runat="server" Text="SUBMIT" OnClick="btnAchievementSubmit_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%--ANNOUNCEMENT MODAL--%>
+        <div class="modal fade" id="announcementModal" tabindex="-1" role="dialog" aria-labelledby="announcementModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center bgblue">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="announcementModalLabel">Create New Announcement Request</h4>
+                        <small>Please fill out the form below to add an announcement.</small>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form">
+                            <%--<div id="announcementError" class="alert alert-danger text-center" runat="server">
+                                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                <asp:Label ID="Label5" runat="server" Text=" ERROR: Something went wrong. Please try again."></asp:Label>
+                            </div>
+                            <div id="announcementSuccess" class="alert alert-success text-center" runat="server">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                <asp:Label ID="Label6" runat="server" Text=" SUCCESS: The announcement request has been submitted."></asp:Label>
+                            </div>--%>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label for="txtAnnouncementTitle">Title: <span style="color: red;">*</span></label>
+                                        <asp:TextBox ID="txtAnnouncementTitle" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label for="announcementLink">Link Attachment:</label>
+                                        <asp:TextBox ID="txtAnnouncementLink" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="txtAnnouncementFileName">File Name:</label>
+                                        <asp:TextBox ID="txtAnnouncementFileName" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="announcementFile">File Attachment:</label>
+                                        <div class="input-group">
+                                            <asp:TextBox ID="txtAnnouncementFile" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
+                                            <label class="input-group-btn">
+                                                <span class="btn btn-primary"><i class="fa fa-upload" aria-hidden="true"></i>
+                                                    <input type="file" style="display: none;" /></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label for="announcementDescription">Description: <span style="color: red;">*</span></label>
+                                        <textarea runat="server" class="form-control" id="announcementDescription" rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:Button ID="btnAnnouncementCancel" CssClass="btn btn-default" data-dismiss="modal" runat="server" Text="CANCEL" />
+                        <asp:Button ID="btnAnnouncementSubmit" CssClass="btn btn-primary" data-dismiss="modal" runat="server" Text="SUBMIT" OnClick="btnAnnouncementSubmit_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%--PROF DEV MODAL--%>
+        <div class="modal fade" id="profdevModal" tabindex="-1" role="dialog" aria-labelledby="profdevModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center bggreen">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="profdevModalLabel">Create New Professional Development Request</h4>
+                        <small>Please fill out the form below to add a professional development item.</small>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form">
+                            <%--<div id="profdevError" class="alert alert-danger text-center" runat="server">
+                                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                <asp:Label ID="Label7" runat="server" Text=" ERROR: Something went wrong. Please try again."></asp:Label>
+                            </div>
+                            <div id="profdevSuccess" class="alert alert-success text-center" runat="server">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                <asp:Label ID="Label8" runat="server" Text=" SUCCESS: The professional development item request has been submitted."></asp:Label>
+                            </div>--%>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-7">
+                                        <label for="txtProfDevTitle">Title: <span style="color: red;">*</span></label>
+                                        <asp:TextBox ID="txtProfDevTitle" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <label for="ddlProfDevType">Type: <span style="color: red;">*</span></label>
+                                        <asp:DropDownList ID="ddlProfDevType" CssClass="form-control dropdown" runat="server">
+                                        </asp:DropDownList>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label for="txtProfDevLink">Link Attachment:</label>
+                                        <asp:TextBox ID="txtProfDevLink" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="txtProfDevFileName">File Name:</label>
+                                        <asp:TextBox ID="txtProfDevFileName" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="txtProfDevFile">File Attachment:</label>
+                                        <div class="input-group">
+                                            <asp:TextBox ID="txtProfDevFile" runat="server" CssClass="form-control" ReadOnly="true"></asp:TextBox>
+                                            <label class="input-group-btn">
+                                                <span class="btn btn-green"><i class="fa fa-upload" aria-hidden="true"></i>
+                                                    <input type="file" style="display: none;" /></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label for="profdevDescription">Description: <span style="color: red;">*</span></label>
+                                        <textarea runat="server" class="form-control" id="profdevDescription" rows="5"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:Button ID="btnProfDevCancel" CssClass="btn btn-default" data-dismiss="modal" runat="server" Text="CANCEL" />
+                        <asp:Button ID="btnProfDevSubmit" CssClass="btn btn-green" data-dismiss="modal" runat="server" Text="SUBMIT" OnClick="btnProfDevSubmit_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%--CONTACT INFO MODAL--%>
+        <div class="modal fade" id="contactModal" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="contactModalLabel" runat="server">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center bgpurple">
+                        <h4 class="modal-title" id="contactModalLabel">Create New Contact Information Request</h4>
+                        <small>Please fill out the form below to add an contact information item.</small>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form">
+                            <div id="contactError" class="alert alert-danger text-center" runat="server" visible="false">
+                                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                <asp:Label ID="lblContactError" runat="server" Text=" ERROR: Something went wrong. Please try again."></asp:Label>
+                            </div>
+                            <div id="contactSuccess" class="alert alert-success text-center" runat="server" visible="false">
+                                <i class="fa fa-check-circle" aria-hidden="true"></i>
+                                <asp:Label ID="lblContactSuccess" runat="server" Text=" SUCCESS: The contact information  item request has been submitted."></asp:Label>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label for="txtContactFirstName">First Name: <span style="color: red;">*</span></label>
+                                        <asp:TextBox ID="txtContactFirstName" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="txtContactLastName">Last Name: <span style="color: red;">*</span></label>
+                                        <asp:TextBox ID="txtContactLastName" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label for="txtContactTitle">Professional Title: <span style="color: red;">*</span></label>
+                                        <asp:TextBox ID="txtContactTitle" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6 time-padding">
+                                        <label for="txtContactPhone">Phone: <span style="color: red;">*</span></label>
+                                        <asp:TextBox ID="txtContactPhone" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="txtContactEmail">Email: <span style="color: red;">*</span></label>
+                                        <asp:TextBox ID="txtContactEmail" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <label for="txtContactLocation">Location: <span style="color: red;">*</span></label>
+                                        <asp:TextBox ID="txtContactLocation" runat="server" CssClass="form-control"></asp:TextBox>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <asp:Button ID="btnContactCancel" CssClass="btn btn-default" runat="server" Text="CANCEL" OnClick="btnContactCancel_Click" />
+                        <asp:Button ID="btnContactSubmit" CssClass="btn btn-purple" data-backdrop="static" runat="server" Text="SUBMIT" OnClick="btnContactSubmit_Click" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%--ADMIN LOGIN MODAL--%>
+        <div class="modal fade" id="adminLoginModal" tabindex="-1" role="dialog" aria-labelledby="adminLoginModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center bgcherry">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="adminLoginModalLabel">Admin Login</h4>
+                        <small>Login with your AccessNet Username and Password</small>
+                    </div>
+                    <div class="modal-body">
+                        <div id="adminloginform" class="form">
+                            <div id="loginError" class="alert alert-danger text-center" runat="server">
+                                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                <asp:Label ID="Label13" runat="server" Text=" ERROR: Username/password pair not found. Please try again."></asp:Label>
+                            </div>
+                            <div class="login-padding">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <label for="txtUsername">Username <span style="color: red;">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
+                                                <asp:TextBox ID="txtAdminUsername" runat="server" CssClass="form-control"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <label for="txtPassword">Password <span style="color: red;">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i></span>
+                                                <asp:TextBox ID="txtAdminPassword" runat="server" CssClass="form-control"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12">
+                                            <asp:Button ID="btnAdminLogin" CssClass="btn btn-cherry full-width" runat="server" Text="LOGIN" OnClick="btnAdminLogin_Click" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%--LOGIN MODAL--%>
+        <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center bgcherry">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="loginModalLabel">Login</h4>
+                        <small>Login with your AccessNet Username and Password</small>
+                    </div>
+                    <div class="modal-body">
+                        <div id="loginform" class="form">
+                            <div id="Div1" class="alert alert-danger text-center" runat="server">
+                                <i class="fa fa-exclamation-circle" aria-hidden="true"></i>
+                                <asp:Label ID="Label11" runat="server" Text=" ERROR: Username/password pair not found. Please try again."></asp:Label>
+                            </div>
+                            <div class="login-padding">
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <label for="txtUsername">Username <span style="color: red;">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-user" aria-hidden="true"></i></span>
+                                                <asp:TextBox ID="txtUsername" runat="server" CssClass="form-control"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <label for="txtPassword">Password <span style="color: red;">*</span></label>
+                                            <div class="input-group">
+                                                <span class="input-group-addon"><i class="fa fa-lock" aria-hidden="true"></i></span>
+                                                <asp:TextBox ID="txtPassword" runat="server" CssClass="form-control"></asp:TextBox>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="col-sm-12 col-md-12">
+                                            <asp:Button ID="btnLogin" CssClass="btn btn-cherry full-width" runat="server" Text="LOGIN" OnClick="btnLogin_Click" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <%-- ADVISOR LOGIN NOTICE MODAL--%>
+        <div class="modal fade" id="advisorLoginNotice" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header text-center bgcherry">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" style="font-size: 28px;">Welcome, Advisor Name!</h4>
+                    </div>
+                    <div class="modal-body" style="padding: 13px 35px 1px;">
+                        <div class="row well">
+                            <div class="col-sm-3 text-center" style="padding-top: 10px;"><i class="fa fa-list fa-3x" aria-hidden="true"></i></div>
+                            <div class="col-sm-9">
+                                <p style="font-size: 20px;">To create a new request select from the request list below or in the top menu bar.</p>
+                            </div>
+                        </div>
+                        <div style="overflow-y: auto; height: 400px; margin: 0 -14px;">
+                            <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#announcementModal" class="info-box bgblue">
+                                <span class="info-box-icon"><i class="fa fa-bullhorn"></i></span>
+                                <div class="info-box-content">
+                                    <h2 class="text-center">Announcements</h2>
+                                </div>
+                            </a>
+                            <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#achievementModal" class="info-box bglight-blue">
+                                <span class="info-box-icon"><i class="fa fa-star"></i></span>
+                                <div class="info-box-content">
+                                    <h2 class="text-center">Achievements</h2>
+                                </div>
+                            </a>
+                            <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#eventModal" class="info-box bgpink">
+                                <span class="info-box-icon"><i class="fa fa-calendar"></i></span>
+                                <div class="info-box-content">
+                                    <h2 class="text-center">Events</h2>
+                                </div>
+                            </a>
+                            <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#resourceModal" class="info-box bgteal">
+                                <span class="info-box-icon"><i class="fa fa-files-o"></i></span>
+                                <div class="info-box-content">
+                                    <h2 class="text-center">Resources</h2>
+                                </div>
+                            </a>
+                            <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#policyModal" class="info-box bgyellow">
+                                <span class="info-box-icon"><i class="fa fa-gavel"></i></span>
+                                <div class="info-box-content">
+                                    <h2 class="text-center">Policies</h2>
+                                </div>
+                            </a>
+                            <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#contactModal" class="info-box bgpurple">
+                                <span class="info-box-icon"><i class="fa fa-address-card-o"></i></span>
+                                <div class="info-box-content">
+                                    <h2 class="text-center">Contact Information</h2>
+                                </div>
+                            </a>
+                            <a href="#" data-dismiss="modal" data-toggle="modal" data-target="#profdevModal" class="info-box bggreen">
+                                <span class="info-box-icon"><i class="fa fa-briefcase"></i></span>
+                                <div class="info-box-content">
+                                    <h2 class="text-center">Professional Development</h2>
+                                </div>
+                            </a>
+                        </div>
+                        <br />
+                        <br />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/qtip2/3.0.3/jquery.qtip.min.js"></script>
+    <script src="assets/plugins/input-mask/jquery.inputmask.phone.extensions.js"></script>
+    <script src="assets/js/app.min.js"></script>
+    <script src="assets/js/Main.js"></script>
+</body>
+</html>
